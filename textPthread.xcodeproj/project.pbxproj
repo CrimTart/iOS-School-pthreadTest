@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		04EF31DA1ECE09AA00A63F3C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF31D91ECE09AA00A63F3C /* main.m */; };
+		8428FA9A1EED7261002D976A /* MyThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 8428FA991EED7261002D976A /* MyThread.m */; };
+		8428FA9D1EED73EC002D976A /* MyCondition.m in Sources */ = {isa = PBXBuildFile; fileRef = 8428FA9C1EED73EC002D976A /* MyCondition.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,10 @@
 /* Begin PBXFileReference section */
 		04EF31D61ECE09AA00A63F3C /* textPthread */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = textPthread; sourceTree = BUILT_PRODUCTS_DIR; };
 		04EF31D91ECE09AA00A63F3C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8428FA981EED7261002D976A /* MyThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyThread.h; sourceTree = "<group>"; };
+		8428FA991EED7261002D976A /* MyThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyThread.m; sourceTree = "<group>"; };
+		8428FA9B1EED73EC002D976A /* MyCondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCondition.h; sourceTree = "<group>"; };
+		8428FA9C1EED73EC002D976A /* MyCondition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCondition.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +64,10 @@
 			isa = PBXGroup;
 			children = (
 				04EF31D91ECE09AA00A63F3C /* main.m */,
+				8428FA981EED7261002D976A /* MyThread.h */,
+				8428FA991EED7261002D976A /* MyThread.m */,
+				8428FA9B1EED73EC002D976A /* MyCondition.h */,
+				8428FA9C1EED73EC002D976A /* MyCondition.m */,
 			);
 			path = textPthread;
 			sourceTree = "<group>";
@@ -120,6 +130,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				04EF31DA1ECE09AA00A63F3C /* main.m in Sources */,
+				8428FA9D1EED73EC002D976A /* MyCondition.m in Sources */,
+				8428FA9A1EED7261002D976A /* MyThread.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

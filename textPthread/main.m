@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <pthread.h>
+#import "MyThread.h"
+#import "MyCondition.h"
 
 @import Darwin.os.lock;
 
@@ -147,41 +149,47 @@ int main(int argc, const char * argv[]) {
         endTime = [NSDate new].timeIntervalSince1970;
         NSLog(@"GCD result %lu", gcdResult);
         NSLog(@"GCD measured time %f", endTime-startTime);
+//------------------------------------------------------------------
+        NSMutableArray<MyThread*> *threads = [[NSMutableArray alloc] init];
         
-        __block NSUInteger nsthreadResult = 0;
-        NSMutableArray<NSThread *> *threads = [[NSMutableArray alloc] initWithCapacity:maxThreadCount];
+        MyCondition *condVar = [[MyCondition alloc] init];
         
-        for(NSUInteger index=0; index<maxThreadCount; ++index) {
-            NSUInteger addition = collection.count%maxThreadCount;
+        NSTimeInterval startTimeT = [NSDate new].timeIntervalSince1970;
+        
+        NSUInteger additionT = collection.count%maxThreadCount;
+        // Fork
+        for (NSUInteger i=0; i<maxThreadCount; ++i) {
             
-            NSUInteger length = collection.count/maxThreadCount;
-            NSUInteger step = collection.count/maxThreadCount;
+            NSUInteger lengthT = collection.count/maxThreadCount;
+            NSUInteger stepT = collection.count/maxThreadCount;
             
-            if (addition!=0 && index==(maxThreadCount-1)) {
-                length = length+addition;
+            if ( additionT!=0 && i==(maxThreadCount-1) ) {
+                lengthT = lengthT+additionT;
             }
             
-            __block NSRange range = NSMakeRange(index*step, length);
-            [threads addObject:[[NSThread alloc] initWithBlock:^{
-                NSUInteger sum = 0;
-                for (NSUInteger i=range.location; i<(range.location+range.length);++i) {
-                    sum = sum + collection[i].integerValue;
-                    //NSLog(@"Thread: %lu sum: %lu", i, sum);
-                }
-                
-                // В общую сумму пишем синхронно
-                [lock lock];
-                nsthreadResult = nsthreadResult + sum;
-                [lock unlock];
-            }]];
+            NSRange subarrayRange = NSMakeRange(i*stepT, lengthT);
+            MyThread *th = [[MyThread alloc] initWithRange:subarrayRange ofArray:collection];
+            th.cond = condVar;
+            
+            threads[i] = th;
+            [th start];
         }
         
-        for(NSThread *thread in threads) {
-            [thread start];
+        [condVar lock];
+        while (![condVar checkCondition:threads]) {
+            [condVar wait];
+        }
+        [condVar unlock];
+        NSUInteger resultT = 0;
+        for (NSUInteger i=0; i<maxThreadCount; ++i) {
+            MyThread *thread = threads[i];
+            resultT = resultT + thread.result;
         }
         
-        NSLog(@"NSThread result %lu", nsthreadResult);
-        
+        NSTimeInterval endTimeT = [NSDate new].timeIntervalSince1970;
+        NSLog(@"NSThread result %lu", resultT);
+        NSLog(@"NSThread measured time %f", endTimeT-startTimeT);
+        //--------------------------------------------------------
         // Для сравнения однопоточный вариант
         startTime = [NSDate new].timeIntervalSince1970;
         NSUInteger forResult = 0;
